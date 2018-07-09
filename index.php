@@ -5,10 +5,6 @@ $error = "";
 if (array_key_exists("city", $_GET)) {
     $urlContents = @file_get_contents("https://api.openweathermap.org/data/2.5/weather?q=" . $_GET["city"] . "&appid=0e1b535907ee461495debad1f1210b47");
 
-    // if ($urlContents == false) {
-    //     $error = "Could not find that city, please try again.";
-    // }
-
     $weatherArray = json_decode($urlContents, true);
     // print_r($weatherArray);
 
