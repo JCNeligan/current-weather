@@ -3,16 +3,25 @@ $weather = "";
 $error = "";
 
 if (array_key_exists("city", $_GET)) {
-    $urlContents = file_get_contents("https://api.openweathermap.org/data/2.5/weather?q=" . $_GET["city"] . "&appid=0e1b535907ee461495debad1f1210b47");
+    $urlContents = @file_get_contents("https://api.openweathermap.org/data/2.5/weather?q=" . $_GET["city"] . "&appid=0e1b535907ee461495debad1f1210b47");
+
+    // if ($urlContents == false) {
+    //     $error = "Could not find that city, please try again.";
+    // }
 
     $weatherArray = json_decode($urlContents, true);
+    // print_r($weatherArray);
 
-    $weather = "The weather in " . $_GET["city"] . " is currently '" . $weatherArray['weather'][0]['description'] . "'.";
-    $tempInFahrenheit = round($weatherArray['main']['temp'] * (9 / 5) - 459.67);
-    $weather .= " The temperature is " . $tempInFahrenheit . "&#x2109;. ";
-    $windInMph = round(($weatherArray['wind']['speed'] * 2.2369), 2);
-    $weather .= " The wind speed is " . $windInMph . " mph.";
+    if ($weatherArray['cod'] == 200) {
 
+        $weather = "The weather in " . $_GET["city"] . " is currently '" . $weatherArray['weather'][0]['description'] . "'.";
+        $tempInFahrenheit = round($weatherArray['main']['temp'] * (9 / 5) - 459.67);
+        $weather .= " The temperature is " . $tempInFahrenheit . "&#x2109;. ";
+        $windInMph = round(($weatherArray['wind']['speed'] * 2.2369), 2);
+        $weather .= " The wind speed is " . $windInMph . " mph.";
+    } else {
+        $error = "Could not find that city, please try again.";
+    }
 }
 
 ?>
